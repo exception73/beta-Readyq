@@ -7,13 +7,17 @@ import appStore from './Redux/appStore.js';
 // import regeneratorRuntime from "regenerator-runtime";
 
 import {Provider} from 'react-redux';
+import { SparklesCore } from './components/ui/sparkles.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
   <Provider store = {appStore}>
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
+        <>
+        
         <App />
-    </React.StrictMode>
+        </>
+    {/* </React.StrictMode> */}
   </Provider>
   
 )

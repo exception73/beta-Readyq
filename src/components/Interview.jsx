@@ -15,12 +15,14 @@ const Interview = () => {
    
     const [listeningTimeout, setListeningTimeout] = useState(null);
 
-    const startListening = () => {
-        SpeechRecognition.startListening({ continuous: true, language: 'en-IN' });
-    };
 
-    let { transcript,  browserSupportsSpeechRecognition } = useSpeechRecognition();
-    
+    let { transcript,  browserSupportsSpeechRecognition, stopListening, resetTranscript} = useSpeechRecognition();
+    // console.log(transcript);
+
+    const startListening = () => {
+        
+        SpeechRecognition.startListening({ continuous: true, language: 'en-GB' });
+    };
 
     useEffect(() => {
         if (transcript) {
@@ -41,6 +43,8 @@ const Interview = () => {
     }, []);
 
     const handleSendData = () => {
+        stopListening;
+        console.log(transcript);
         const sendtobackend = {
             "firstTime" : "false",
             "userQues" : transcript,
@@ -48,8 +52,9 @@ const Interview = () => {
             "assistant_id":  userData?.assistant_id,
             "thread_id" : userData?.thread_id,
         }
-
+       
         SpeechRecognition.stopListening();
+        resetTranscript();
     setTextToCopy("");
         
         
@@ -72,7 +77,7 @@ const Interview = () => {
         </div>
 
         <div className="btn-style">
-
+        
             <button onClick={startListening}>Start Listening</button>
             <button onClick={handleSendData}> Send Data</button>
       </div>
@@ -97,7 +102,7 @@ const Interview = () => {
         <br />
        </div>
         
-        <TextToSpeech text = {userData?.message} />
+        <TextToSpeech />
       </div>
      
 
