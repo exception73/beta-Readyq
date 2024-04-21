@@ -14,6 +14,7 @@ import TextToSpeech from "./components/TextToSpeech";
 import { SparklesCore } from "./components/ui/sparkles";
 import { LayoutGrid } from "./components/ui/layout-grid";
 import Testimonial from "./components/Testimonial";
+import InterviewWindow from "./components/AcheComponents/InterviewWindow";
 
 
 
@@ -29,13 +30,13 @@ function App() {
     },
     {
       path: "/interview",
-      element: <Interview />,
+      element: <InterviewWindow />,
     },
   ]);
 
   return (
     <>
-    
+{/*     
        <div className="w-screen bg-black overflow-hidden flex flex-col">
            <ContainerScroll
             
@@ -68,39 +69,15 @@ function App() {
                src={Logo} alt="" />
           </ContainerScroll>
           
-       </div>
+       </div> */}
         
         {/* <LayoutGrid cards = {cards} /> */}
           
-        <Testimonial />
+        {/* <Testimonial /> */}
 
 
-{/* 
-    <div className="flex flex-col overflow-hidden">
-      <ContainerScroll
-        titleComponent={
-          <>
-            <h1 className="text-4xl font-semibold text-black dark:text-white">
-              Unleash the power of <br />
-              <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
-                Scroll Animations
-              </span>
-            </h1>
-          </>
-        }
-      >
-        <img
-          src={Logo }
-          alt="hero"
-          height={720}
-          width={1400}
-          className="mx-auto rounded-2xl object-cover h-full object-left-top"
-          draggable={false}
-        />
-      </ContainerScroll>
-    </div> */}
-=
-      {/* <RouterProvider router={appRouter} /> */}
+
+      <RouterProvider router={appRouter} />
     </>
   );
 }

@@ -1,58 +1,79 @@
-import React from "react";
-import { SparklesCore } from "./ui/sparkles";
+import './Testimonial.css'
+import QuotionLogo from './marks.png'
+const Card = ({content, name}) => {
+  return (
 
-const Card = ({ name, handle, content }) => {
-    return (
-      <div className="bg-black z-40 shadow-md rounded-lg overflow-hidden transition duration-300 border-2 border-[#6c6c6c] my-4 hover:transform hover:cursor-pointer hover:scale-105">
+    <div className="single-testimonial">
+    <div className="round-1 round"></div>
+    <div className="round-2 round"></div>
+    <p>{content}</p>
+    <div className="client-info">
+      <div className="client-video">
        
-       <div className="px-4 py-4">
-          <p className="text-gray-300 text-left leading-5 font-semibold text-md ">{content}</p>
-        </div>
-       
-        <div className="flex justify-between items-center px-4 pb-5">
-          <div className="flex items-center">
-            <div>
-              <h5 className="text-xl font-semibold mt-4 text-white">{name}</h5>
-              <p className="text-gray-600">{handle}</p>
-              <p>hello</p>
-            </div>
-          </div>
-        </div>
-        
+        {/* <a href="#"><img src="https://i.ibb.co/DWhSr6S/play-button2.png" alt=""></a> */}
       </div>
-    );
-  };
-  
-const data =
-  "   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam quaerat porro reiciendis, dignissimos expedita minima, Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam quaerat po nam cumque cum ab dolores adipisci qui? Praesentium obcaecati consequuntur repellendus, quibusdam autem nulla doloribus fuga optio unde vel perspiciatis explicabo facilis, eum quam sed!";
-const data1 =
-  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut sunt deleniti itaque.";
+      <div className="client-details">
+        <h6>{name}</h6>
+        {/* <span>Designer, LLCG Team</span> */}
+        <img src = {QuotionLogo} alt ="hello" />
+      </div>
+    </div>
 
-const data2 =
-  "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque quo dignissimos culpa mollitia tempora. Quae, temporibus itaque nam error architecto doloribus quam molestias delectus? Odio illo cupiditate eos, incidunt laboriosam, in eius qua";
-const Testimonial = () => {
+  </div>
+
+  )
+}
+
+const reviews = [
+  { name: "Dhruv", review: "Realistic AI, insightful feedback. Boosted my confidence for interviews!" },
+  { name: "Mitocondria", review: "Incredible tool! The AI interviewer feels real, and the feedback is spot-on. Highly recommend!Improved my skills immensely, I also got a lot of confidense through them, must have in a students phone." },
+  { name: "Gautam", review: "Game-changer! Lifelike AI interviewer, detailed feedback. Must-have for interview prep!.Just a need of the hour i feel i have is amazing" },
+  { name: "Exception73", review: "Wow! Lifesaver for interviews. Realistic AI, detailed feedback. Highly recommend!. " },
+  { name: "Navya", review: "I'm so impressed by this app! The AI interviewer is so realistic, and the feedback it provides is so insightful. It's really helped me identify my weaknesses and improve my interview skills. Highly recommend it to anyone preparing for interviews!.Bhai one needed in our college especially, Just make the responses a litlle faster would love that too" },
+  { name: "Codemaster", review: "Love it! Realistic AI, thorough feedback. Boosted my confidence!" },
+  { name: "Prince", review: "Maja Aa gaya bhai Kepp working on this till i get some of the best results and also love the reviews feature for each interview." },
+  { name: "Anonymous", review: "Amazing app! Realistic AI, spot-on feedback. Great for interview prep!" },
+  { name: "Sama", review: "Brilliant tool! Lifelike AI, detailed feedback. Confidence booster!" },
+  { name: "Charmander", review: "Absolutely fantastic! AI interviewer is incredibly realistic, feedback is so insightful. Improved my skills immensely!" },
+  // Additional reviews
+  { name: "Ash", review: "Bohot achhi app hai, mujhe interview ke liye ache se tayari karne me madad mili. AI interviewer aur feedback dono bhot achhe hai!" },
+  { name: "Brock", review: "This app rocks! The AI interviewer is so real, and the feedback is top-notch. It's been a great help for my interview preparation!" },
+  { name: "Misty", review: "This app is a gem! The AI interviewer feels like a real person, and the feedback it gives is invaluable. Highly recommended for anyone preparing for interviews!" },
+  { name: "Gary", review: "¡Increíble aplicación! El entrevistador de IA es muy realista y los comentarios son muy útiles. ¡Me ha ayudado mucho a mejorar mis habilidades de entrevista!" }
+];
+
+  const Testimonial = () => {
+   
   return (
     <div className="bg-black">
-        
-
-        <p className="">Hundreds of people </p>
-        <p>already love us</p>
-
-      <div className="flex flex-row w-3/4 m-auto">
-        <div className="mx-4">
-          <Card name="Navya" content={data2} />
-          <Card name="Dhruv" content={data1} />
-        </div>
-
-        <div className="mx-4">
-          <Card name="Gautam" content={data} />
-        </div>
-
-        <div className="mx-4">
-          <Card name="Dhruv" content={data1} />
-          <Card name="Navya" content={data2} />
-        </div>
+      <div className="px-32 py-16  ">
+        <div className=" m-2 text-[#3B82F6] font-extrabold text-7xl ">Hundreds of people</div>
+        <div className=" m-2 text-7xl text-white">already love us</div>
+        <div className=" m-2 text-xl font-bold">But dont just take our word for it!</div>
       </div>
+
+      <section className="testimonial-area">
+        <div className="container">
+
+
+         
+          <div className="testimonial-content owl-carousel">
+
+
+          {
+            reviews.slice(0, 11).map((review, index) => (
+              <Card key={index} name={review.name} content={review.review} />
+            ))
+          }
+
+
+
+           
+          
+          </div>
+        </div>
+</section>
+
     </div>
   );
 };
