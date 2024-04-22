@@ -31,6 +31,7 @@ function App() {
     {
       path: "/interview",
       element: <InterviewWindow />,
+      // element : <Interview />
     },
   ]);
 

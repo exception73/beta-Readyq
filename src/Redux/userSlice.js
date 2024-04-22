@@ -6,6 +6,7 @@ export const startNewInterview = createAsyncThunk(
     "user/startNewInterview",
     async (payload) => {
         const response = await axios.post(`http://localhost:4000/interview`, payload);
+
         return response.data;
     }
 );
@@ -16,6 +17,7 @@ export const askNextQuestion = createAsyncThunk(
 
         const response = await axios.post(`http://localhost:4000/interview`, payload);
         console.log(response.data);
+        
         return response.data;
     }
 )
@@ -26,7 +28,8 @@ const userSlice = createSlice({
         thread_id: null,
         assistant_id: null,
         creationTime: null,
-        message: "hello",
+        message: "",
+        messageArray : [],
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -37,11 +40,14 @@ const userSlice = createSlice({
             state.assistant_id = data.assistant_id;
             state.creationTime = data.creationTime;
             state.message = data.message;
+            state.messageArray.push(data.message);
         })
         .addCase(askNextQuestion.fulfilled, (state, action) => {
             const data = action.payload;
             // Update state with data from askNextQuestion
             state.message = data.message;
+            console.log(data.message)
+            state.messageArray.push(data.message);
             // Modify state properties as needed
         });
     },

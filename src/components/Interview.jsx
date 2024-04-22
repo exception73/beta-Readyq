@@ -142,7 +142,10 @@ const Interview = () => {
           </div>
         </div>
 
-        <div className="container flex flex-col ">
+
+        
+
+        <div className="container  ">
           <div style={{ border: "2px solid black  ", padding: "40px" }}>
             <h2>Speech to Text Converter</h2>
             <br />
