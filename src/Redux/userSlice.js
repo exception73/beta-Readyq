@@ -28,7 +28,7 @@ const userSlice = createSlice({
         thread_id: null,
         assistant_id: null,
         creationTime: null,
-        message: "",
+        message: "hello",
         messageArray : [],
     },
     reducers: {},
