@@ -1,21 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import StartInterview from "./components/StartInterview";
-import Interview from "./components/Interview";
 import "regenerator-runtime/runtime";
 import "regenerator-runtime";
-import Logo from './image.png'
 
 
-import {
-  ContainerScroll,
-  Header,
-} from "./components/ui/container-scroll-animation";
-import TextToSpeech from "./components/TextToSpeech";
-import { SparklesCore } from "./components/ui/sparkles";
-import { LayoutGrid } from "./components/ui/layout-grid";
-import Testimonial from "./components/Testimonial";
-import InterviewWindow from "./components/AcheComponents/InterviewWindow";
 
+import InterviewWindow from "./components/InterviewWindow";
+import Home from './components/Home'
+import MultiStepForm from "./components/MultiStepForm";
 
 
 
@@ -23,16 +14,19 @@ function App() {
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element : <StartInterview />,
+      element : <Home />,
       // element: (
        
       // ),
     },
     {
       path: "/interview",
-      element: <InterviewWindow />,
+      element: <MultiStepForm />,
       // element : <Interview />
-    },
+    },{
+      path : "/startInterview",
+      element : <InterviewWindow />
+    }
   ]);
 
   return (
