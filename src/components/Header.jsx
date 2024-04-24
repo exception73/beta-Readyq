@@ -76,19 +76,15 @@ import PasscodeModal from './PasscodeModal.jsx';
               </span>
             </div>
             <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl text-white text-sm gap-10 font-medium lg:flex">
-              <a href="/" className="px-4 py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5]">
+              <p onClick={()=>{navigate('/')}} className="px-4 py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5] cursor-pointer">
                 Home
-              </a>
-              <a href="/about" className="px-4 py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5]">
+              </p>
+              <p onClick={()=>{navigate('/about')}} className="px-4 py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5] cursor-pointer">
                 About
-              </a>
-              <p onClick={handleClick} className="px-4 cursor-pointer py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5]">
+              </p>
+              <p onClick={handleClick} className="px-4 cursor-pointer py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5] cursor-pointer">
                 Interview
               </p>
-              {/* <StartInterview /> */}
-              <a href="/pricing" className="px-4 py-1 transition-colors duration-300 hover:bg-white rounded-full hover:text-[#3247F5]">
-                Pricing
-              </a>
             </div>
            {  token ? <> </>  : <div className="flex justify-end">
               <MovingBorderBtn onClick={handleSignupButton} borderRadius="1.5rem" className="p-2 text-[13px]">

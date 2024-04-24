@@ -51,25 +51,18 @@ const MultiStepForm = () => {
         return (
 
           <div>
-             <FirstForm />
-          <button onClick={nextStep}>Next</button>
+             <FirstForm nextStep={nextStep}/>
+          {/* <button onClick={nextStep}>Next</button> */}
           </div>
           
         );
       case 2:
         return (
               <div>
-                <SecondForm />
-                <button onClick={nextStep}>Next</button>
+                <SecondForm handleSubmit={handleSubmit} />
               </div>
         );
-      case 3:
-        return (
-           <div>
-            <ThirdForm />
-           <button onClick={handleSubmit}>Next</button>
-           </div>
-        );
+     
       default:
         return null;
     }
