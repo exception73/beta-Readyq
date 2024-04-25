@@ -36,6 +36,10 @@ const MultiStepForm = () => {
     navigate('/startInterview')
       const action = {
         "firstTime" : "true",
+        name,
+        interviewTime,
+        techStack, 
+        yourLevel,
         "userQues" : ""
       };
       dispatch(startNewInterview(action))
@@ -43,7 +47,7 @@ const MultiStepForm = () => {
    
   };
 
-  const nextStep = () => {
+  const nextStep = (e) => {
     if(step == 1){
       const namevalid = stepOneValidation(name);
       // console.log(namevalid, interviewTime);
@@ -59,11 +63,7 @@ const MultiStepForm = () => {
     setErr('')
     if(step == 2){
 
-
       // logic ki techstack sahi h ya nahi
-
-    
-
 
       if(yourLevel == 0){
         setErr('Select your Level')
@@ -71,10 +71,25 @@ const MultiStepForm = () => {
       }
       
     }
-    setStep(step + 1);
-    if(step == 3){
-      handleSubmit();
+
+
+    if(step == 2){
+      console.log('hellloo')
+
+    handleSubmit(e);
     }
+    setStep(step + 1);
+    console.log(step);
+
+      
+
+  //  if(step == 2){
+  //   console.log('hellloo')
+
+  //   handleSubmit();
+  //  }
+    
+   
   };
 
 
