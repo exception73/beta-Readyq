@@ -37,7 +37,7 @@ const MultiStepForm = () => {
       const action = {
         "firstTime" : "true",
         name,
-        interviewTime,
+        interviewTime ,
         techStack, 
         yourLevel,
         "userQues" : ""

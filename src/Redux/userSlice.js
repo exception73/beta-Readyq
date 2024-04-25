@@ -46,6 +46,7 @@ const userSlice = createSlice({
         message: "hello",
         userToken: null,
         passcode : [],
+        interviewTime : null,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -55,6 +56,7 @@ const userSlice = createSlice({
             state.thread_id = data.thread_id;
             state.assistant_id = data.assistant_id;
             state.creationTime = data.creationTime;
+            state.interviewTime = data.interviewTime;
             state.message = data.message;
         
         })
