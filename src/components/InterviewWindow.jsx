@@ -1,4 +1,4 @@
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InterviewHeader from "./InterviewHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { askNextQuestion } from "../Redux/userSlice";
@@ -10,51 +10,73 @@ import RecordingImage from "../assets/rec.png";
 
 const startListening = () => {
   console.log("i m listing now");
-  SpeechRecognition.startListening({interimResults : true ,continuous: true, language: "en-IN" });
+  SpeechRecognition.startListening({ interimResults: true, continuous: true, language: "en-IN" });
 };
 
 const TextToSpeech = () => {
   let maxLength = 160;
 
   let str = useSelector((store) => store.user?.message);
-  
+  let str1 = useSelector((store) => store.user?.message1);
   useEffect(() => {
-    if (!str) str = "hello";
-    const words = str.split(" ");
-    const chunks = [];
-    let currentChunk = "";
-  
-    for (const word of words) {
-      if ((currentChunk + word).length <= maxLength) {
-        currentChunk += (currentChunk === "" ? "" : " ") + word;
-      } else {
+    if (str) {
+      const words = str.split(" ");
+      const chunks = [];
+      let currentChunk = "";
+
+      for (const word of words) {
+        if ((currentChunk + word).length <= maxLength) {
+          currentChunk += (currentChunk === "" ? "" : " ") + word;
+        } else {
+          chunks.push(currentChunk);
+          currentChunk = word;
+        }
+      }
+
+      if (currentChunk !== "") {
         chunks.push(currentChunk);
-        currentChunk = word;
       }
+
+      const speakChunks = async () => {
+        for (let i = 0; i < chunks.length; i++) {
+          const utterance = new SpeechSynthesisUtterance(chunks[i]);
+          const voices = speechSynthesis.getVoices();
+          utterance.voice = voices[2]; // Set male voice
+
+          await new Promise((resolve) => {
+            utterance.onend = resolve;
+            window.speechSynthesis.speak(utterance);
+          });
+        }
+
+        if (str != "hello") startListening(); // This will be called after all chunks have been spoken
+      };
+
+      speakChunks();
     }
-  
-    if (currentChunk !== "") {
-      chunks.push(currentChunk);
-    }
-  
-    const speakChunks = async () => {
-      for (let i = 0; i < chunks.length; i++) {
-        const utterance = new SpeechSynthesisUtterance(chunks[i]);
-        const voices = speechSynthesis.getVoices();
-        utterance.voice = voices[2]; // Set male voice
-  
-        await new Promise((resolve) => {
-          utterance.onend = resolve;
-          window.speechSynthesis.speak(utterance);
-        });
-      }
-  
-      if(str != "hello") startListening(); // This will be called after all chunks have been spoken
-    };
-  
-    speakChunks();
   }, [str]);
-  
+
+
+};
+
+function TextSpeech(str) {
+
+
+  const speakChunks = async () => {
+
+    const utterance = new SpeechSynthesisUtterance(str);
+    const voices = speechSynthesis.getVoices();
+    utterance.voice = voices[2]; // Set male voice
+
+    await new Promise((resolve) => {
+      utterance.onend = resolve;
+      window.speechSynthesis.speak(utterance);
+    });
+  };
+
+  speakChunks();
+
+
 
 };
 
@@ -80,7 +102,12 @@ const InterviewWindow = () => {
   const transciptArray = [];
   const dispatch = useDispatch();
   const userData = useSelector((store) => store.user);
-
+  if(userData?.message1.length !=0 ){
+    TextSpeech("Thankyou for interweing with us we will get back to you with the report")
+    setTimeout(() => {
+      navigate('/report');
+    }, 5000)
+  }
   const [listeningTimeout, setListeningTimeout] = useState(null);
 
   let {
@@ -99,6 +126,23 @@ const InterviewWindow = () => {
     return () => clearTimeout(listeningTimeout);
   }, []);
 
+  const endcall = async () => {
+    const sendtobackend = {
+      firstTime: "false",
+      userQues: transcript,
+      creationTime: userData?.creationTime,
+      assistant_id: userData?.assistant_id,
+      thread_id: userData?.thread_id,
+      interviewTime: 0,
+    };
+
+    SpeechRecognition.stopListening();
+    await dispatch(askNextQuestion(sendToBackendRef.current));
+    // TextSpeech("Thankyou for interweing with us we will get back to you with the report")
+    setTimeout(() => {
+      navigate('/report');
+    }, 5000)
+  }
   const handleSendData = () => {
     stopListening;
     console.log(transcript);
@@ -109,7 +153,7 @@ const InterviewWindow = () => {
       creationTime: userData?.creationTime,
       assistant_id: userData?.assistant_id,
       thread_id: userData?.thread_id,
-      interviewTime : userData?.interviewTime,
+      interviewTime: userData?.interviewTime,
     };
 
     SpeechRecognition.stopListening();
@@ -167,7 +211,6 @@ const InterviewWindow = () => {
 
   return (
     <div className="bg-[#030917] min-h-screen ">
-      <InterviewHeader />
 
       <div className=" px-24 mt-[2vh]">
         {/* first div for recording is on */}
@@ -223,7 +266,8 @@ const InterviewWindow = () => {
           >
             {isHovered ? "Are you sure?" : "Continue"}
           </button>
-          <button className="text-white w-[10vw] mx-4 py-2 bg-red-600 rounded">
+          <button className="text-white w-[10vw] mx-4 py-2 bg-red-600 rounded"
+            onClick={endcall}>
             End
           </button>
         </div>
