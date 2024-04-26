@@ -13,11 +13,10 @@ const stepOneValidation = (name) => {
   if (!isNameValid) return "Enter you valid name";
   return null;
 }
+
+
 function TextToSpeech(str) {
-
-
   const speakChunks = async () => {
-
     const utterance = new SpeechSynthesisUtterance(str);
     const voices = speechSynthesis.getVoices();
     utterance.voice = voices[2]; // Set male voice
@@ -43,25 +42,28 @@ const MultiStepForm = () => {
   const [techStack, setTechStack] = useState("");
   const [err, setErr] = useState("");
   const [yourLevel, setYourLevel] = useState(0);
-
+  const [ended , setEnded ] = useState(true);
 
   const sendToBackendRef = useRef({
     firstTime: "false",
-    userQues: "Thanks for taking my interview",
+    userQues: "",
     creationTime: userData?.creationTime,
     assistant_id: userData?.assistant_id,
     thread_id: userData?.thread_id,
     interviewTime: 0,
+    message1 : null,
+    completed: userData?.completed
   });
 
   useEffect(() => {
     sendToBackendRef.current = {
       firstTime: "false",
-      userQues: "Thanks for taking my interview",
+      userQues: "",
       creationTime: userData?.creationTime,
       assistant_id: userData?.assistant_id,
       thread_id: userData?.thread_id,
       interviewTime: 0,
+      completed : userData?.completed
     };
   }, [userData, interviewTime]);
 
@@ -82,10 +84,11 @@ const MultiStepForm = () => {
     }, interviewTime * 60 * 1000);
 
     setTimeout(async () => {
-      if (sendToBackendRef.current?.assistant_id != null) {
+      if (sendToBackendRef.current?.completed == false  &&  ended) {
         SpeechRecognition.stopListening();
-        await dispatch(askNextQuestion(sendToBackendRef.current));
         TextToSpeech("Thankyou for interweing with us we will get back to you with the report")
+        setEnded(false);
+        dispatch(askNextQuestion(sendToBackendRef.current));
         setTimeout(() => {
           navigate('/report');
         }, 5000)
