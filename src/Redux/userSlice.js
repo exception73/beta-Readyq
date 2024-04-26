@@ -13,6 +13,7 @@ export const startNewInterview = createAsyncThunk(
 export const askNextQuestion = createAsyncThunk(
     "/Nextquestion", 
     async (payload) => {
+        console.log(payload)
         const response = await axios.post(`http://localhost:4000/interview`, payload);
         return response.data;
     }
@@ -43,8 +44,12 @@ const userSlice = createSlice({
         thread_id: null,
         assistant_id: null,
         creationTime: null,
-        message: "hello",
-        message1 :null,
+
+    ///mes and mes1 diff h
+        message: "",
+        //message1 is report card
+        message1 :"",
+
         userToken: null,
         passcode : [],
         interviewTime : null,
@@ -64,10 +69,11 @@ const userSlice = createSlice({
         })
         .addCase(askNextQuestion.fulfilled, (state, action) => {
             const data = action.payload;
+            console.log(data);
             // Update state with data from askNextQuestion
             state.message = data.message;
             state.message1 = data.message1;
-            state.completed = data.completed;
+            state.completed = data.completed;   
             console.log(data)
         
             // Modify state properties as needed

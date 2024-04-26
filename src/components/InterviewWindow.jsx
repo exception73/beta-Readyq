@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { askNextQuestion } from "../Redux/userSlice";
 import SpeechRecognition, {
@@ -6,81 +7,18 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 
 import RecordingImage from "../assets/rec.png";
+import { useNavigate } from "react-router-dom";
+import TextSpeech from "../utils/TextSpeech";
+import { TextToSpeech } from "../utils/TextToSpeech";
 
-const startListening = () => {
-  console.log("i m listing now");
-  SpeechRecognition.startListening({ interimResults: true, continuous: true, language: "en-IN" });
-};
-
-const TextToSpeech = () => {
-  let maxLength = 160;
-
-  let str = useSelector((store) => store.user?.message);
-
-  useEffect(() => {
-    if (!str) str = "hello";
-    const words = str.split(" ");
-    const chunks = [];
-    let currentChunk = "";
-
-    for (const word of words) {
-      if ((currentChunk + word).length <= maxLength) {
-        currentChunk += (currentChunk === "" ? "" : " ") + word;
-      } else {
-        chunks.push(currentChunk);
-        currentChunk = word;
-      }
-    }
-
-    if (currentChunk !== "") {
-      chunks.push(currentChunk);
-    }
-
-    const speakChunks = async () => {
-      for (let i = 0; i < chunks.length; i++) {
-        const utterance = new SpeechSynthesisUtterance(chunks[i]);
-        const voices = speechSynthesis.getVoices();
-        utterance.voice = voices[2]; // Set male voice
-
-        await new Promise((resolve) => {
-          utterance.onend = resolve;
-          window.speechSynthesis.speak(utterance);
-        });
-      }
-
-      if (str != "hello") startListening(); // This will be called after all chunks have been spoken
-    };
-
-    speakChunks();
-
-  }, [str]);
-
-
-};
-
-function TextSpeech(str) {
-  const speakChunks = async () => {
-    const utterance = new SpeechSynthesisUtterance(str);
-    const voices = speechSynthesis.getVoices();
-    utterance.voice = voices[2]; // Set male voice
-
-    await new Promise((resolve) => {
-      utterance.onend = resolve;
-      window.speechSynthesis.speak(utterance);
-    });
-  };
-
-  speakChunks();
-};
 
 const InterviewWindow = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const [ended,setEnded] = useState(true);
-  const [textToCopy, setTextToCopy] = useState();
-  const [dataFromBackend, setDataFromBackend] = useState(
-    "this is dummy data from backend"
-  );
+ 
+
+
+  const navigate = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
 
@@ -95,13 +33,7 @@ const InterviewWindow = () => {
   const transciptArray = [];
   const dispatch = useDispatch();
   const userData = useSelector((store) => store.user);
-  if (userData?.completed == true  && ended ) {
-    TextSpeech("Thankyou for interweing with us we will get back to you with the report")
-    setEnded(false);
-    setTimeout(() => {
-      navigate('/report');
-    }, 5000)
-  }
+
   const [listeningTimeout, setListeningTimeout] = useState(null);
 
   let {
@@ -120,23 +52,30 @@ const InterviewWindow = () => {
     return () => clearTimeout(listeningTimeout);
   }, []);
 
-  const endcall = async () => {
-    const sendtobackend = {
-      firstTime: "false",
-      userQues: transcript,
-      creationTime: userData?.creationTime,
-      assistant_id: userData?.assistant_id,
-      thread_id: userData?.thread_id,
-      interviewTime: 0,
-    };
 
-    SpeechRecognition.stopListening();
-    await dispatch(askNextQuestion(sendToBackendRef.current));
-    // TextSpeech("Thankyou for interweing with us we will get back to you with the report")
-    setTimeout(() => {
-      navigate('/report');
-    }, 5000)
-  }
+  const endcall = 
+     async () => {
+      console.log('i am coming from multistep form')
+      const sendtobackend = {
+        firstTime: "false",
+        userQues: transcript,
+        creationTime: userData?.creationTime,
+        assistant_id: userData?.assistant_id,
+        thread_id: userData?.thread_id,
+        interviewTime: 0,
+      };
+  
+      SpeechRecognition.stopListening();
+      dispatch(askNextQuestion(sendtobackend));
+      TextSpeech("Thankyou for interweing with us we will get back to you with the report")
+  
+      setTimeout(() => {
+        navigate('/reportloader');
+      }, 2000)
+     }
+  
+
+  
   const handleSendData = () => {
     stopListening;
     console.log(transcript);
@@ -152,7 +91,7 @@ const InterviewWindow = () => {
 
     SpeechRecognition.stopListening();
     resetTranscript();
-    setTextToCopy("");
+ 
 
     dispatch(askNextQuestion(sendtobackend));
   };
@@ -202,11 +141,11 @@ const InterviewWindow = () => {
   }, []);
 
   // --------------------CAMERA CLOSED-----------------
-
+  
   return (
     <div className="bg-[#030917] min-h-screen ">
 
-      <div className=" px-24 mt-[2vh]">
+      <div className=" px-24 pt-[2vh]">
         {/* first div for recording is on */}
         <div className="flex p-2 px-4 bg-[#2f343f] w-fit rounded-3xl justify-center">
           <img className="w-6  mr-2 " src={RecordingImage} alt="Recording" />

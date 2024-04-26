@@ -1,4 +1,4 @@
-import { useState } from "react";
+import  { useState } from "react";
 import { MultiStepLoader as Loader} from "./ui/multi-step-loader";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -30,12 +30,12 @@ const loadingStates = [
   },
 ];
 
-export default function MultiStepLoader() {
+export default function InterviewEndLoader() {
   const [loading, setLoading] = useState(true);
-  const userMessage = useSelector(store => store?.user?.message);
+  const userMessage = useSelector(store => store?.user?.message1);
 
   const navigate = useNavigate();
-  if(userMessage != '') navigate('/startInterview')
+  if(userMessage != '') navigate('/report')
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">

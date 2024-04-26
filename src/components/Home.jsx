@@ -5,6 +5,13 @@ import { BackgroundBeams } from '../components/ui/Background';
 import { InfiniteMovingCardsDemo } from '../components/ui/InfiniteMovingCardsDemo';
 import Footer from '../components/Footer';
 import { CardHoverEffect } from './CardHoverEffect';
+import Feedback from './Feedback';
+import {
+  GlowingStarsBackgroundCard,
+  GlowingStarsDescription,
+  GlowingStarsTitle,
+} from "./ui/glowingStars.tsx";
+import { SparklesCore } from './ui/sparkles';
 
 
 function Home() {
@@ -55,6 +62,16 @@ function Home() {
           </div>
         </div>
       </div>
+
+
+<Feedback />
+     
+
+
+      
+      
+
+    
       <div>
         <Footer />
       </div>
