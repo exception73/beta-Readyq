@@ -7,6 +7,8 @@ import "regenerator-runtime";
 import InterviewWindow from "./components/InterviewWindow";
 import Home from './components/Home'
 import MultiStepForm from "./components/MultiStepForm";
+import EvaluationReport from "./components/Evaluation report";
+import MultiStepLoaderDemo from "./components/MultiStepLoader";
 
 
 
@@ -26,6 +28,12 @@ function App() {
     },{
       path : "/startInterview",
       element : <InterviewWindow />
+    },{
+      path : "/report",
+      element : <EvaluationReport />
+    },{
+      path : "/loader",
+      element : <MultiStepLoaderDemo />
     }
   ]);
 

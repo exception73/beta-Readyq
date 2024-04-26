@@ -1,116 +1,137 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { startNewInterview } from '../Redux/userSlice';
-import { useDispatch } from 'react-redux';
+import { askNextQuestion, startNewInterview } from '../Redux/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import FirstForm from './FirstForm';
 import SecondForm from './SecondForm';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const stepOneValidation = (name) => {
-
   const isNameValid = /^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/.test(name);
-
-  if(!isNameValid) return "Enter you valid name"
-  return null
+  if (!isNameValid) return "Enter you valid name";
+  return null;
 }
+function TextToSpeech(str) {
 
+
+  const speakChunks = async () => {
+
+    const utterance = new SpeechSynthesisUtterance(str);
+    const voices = speechSynthesis.getVoices();
+    utterance.voice = voices[2]; // Set male voice
+
+    await new Promise((resolve) => {
+      utterance.onend = resolve;
+      window.speechSynthesis.speak(utterance);
+    });
+  };
+
+  speakChunks();
+
+
+
+};
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
-
+  const dispatch = useDispatch();
+  const userData = useSelector((store) => store.user);
   const [name, setName] = useState("");
-
-  // 0 means nothing , 1 menas 10 min , 2 mens 20 min
   const [interviewTime, setInterviewTime] = useState(0);
   const [techStack, setTechStack] = useState("");
   const [err, setErr] = useState("");
-
-  //0 means nothin, 1 menas noob, 2 means intemediate, 3 mes pro
   const [yourLevel, setYourLevel] = useState(0);
-  
 
-  const handleSubmit = (e) => {
-    console.log(name, interviewTime, techStack, yourLevel)
+
+  const sendToBackendRef = useRef({
+    firstTime: "false",
+    userQues: "Thanks for taking my interview",
+    creationTime: userData?.creationTime,
+    assistant_id: userData?.assistant_id,
+    thread_id: userData?.thread_id,
+    interviewTime: 0,
+  });
+
+  useEffect(() => {
+    sendToBackendRef.current = {
+      firstTime: "false",
+      userQues: "Thanks for taking my interview",
+      creationTime: userData?.creationTime,
+      assistant_id: userData?.assistant_id,
+      thread_id: userData?.thread_id,
+      interviewTime: 0,
+    };
+  }, [userData, interviewTime]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic
+    const action = {
+      "firstTime": "true",
+      name,
+      interviewTime,
+      techStack,
+      yourLevel,
+      "userQues": ""
+    };
+    await dispatch(startNewInterview(action))
     navigate('/startInterview')
-      const action = {
-        "firstTime" : "true",
-        name,
-        interviewTime ,
-        techStack, 
-        yourLevel,
-        "userQues" : ""
-      };
-      dispatch(startNewInterview(action))
-  
-   
+    setTimeout(() => {
+      window.alert(`${interviewTime} has finished. Complete your answer fast.`);
+    }, interviewTime * 60 * 1000);
+
+    setTimeout(async () => {
+      if (sendToBackendRef.current?.assistant_id != null) {
+        SpeechRecognition.stopListening();
+        await dispatch(askNextQuestion(sendToBackendRef.current));
+        TextToSpeech("Thankyou for interweing with us we will get back to you with the report")
+        setTimeout(() => {
+          navigate('/report');
+        }, 5000)
+      }
+    }, (interviewTime + 0.4) * 60 * 1000);
   };
 
   const nextStep = (e) => {
-    if(step == 1){
+    if (step == 1) {
       const namevalid = stepOneValidation(name);
-      // console.log(namevalid, interviewTime);
-      if(namevalid){
+      if (namevalid) {
         setErr(namevalid);
         return;
       }
-      if(interviewTime == 0){
+      if (interviewTime == 0) {
         setErr("Select your Interview length.")
         return;
       }
     }
     setErr('')
-    if(step == 2){
-
-      // logic ki techstack sahi h ya nahi
-
-      if(yourLevel == 0){
+    if (step == 2) {
+      if (yourLevel == 0) {
         setErr('Select your Level')
         return;
       }
-      
     }
-
-
-    if(step == 2){
-      console.log('hellloo')
-
-    handleSubmit(e);
+    if (step == 2) {
+      handleSubmit(e);
     }
     setStep(step + 1);
-    console.log(step);
-
-      
-
-  //  if(step == 2){
-  //   console.log('hellloo')
-
-  //   handleSubmit();
-  //  }
-    
-   
   };
-
 
   const renderStep = () => {
     switch (step) {
       case 1:
         return (
-
           <div>
-             <FirstForm nextStep={nextStep} setName={setName} setInterviewTime = {setInterviewTime} err = {err}/>
-          {/* <button onClick={nextStep}>Next</button> */}
+            <FirstForm nextStep={nextStep} setName={setName} setInterviewTime={setInterviewTime} err={err} />
           </div>
-          
         );
       case 2:
         return (
-              <div>
-                <SecondForm nextStep={nextStep} setTechStack={setTechStack} setYourLevel={setYourLevel} err = {err}/>
-              </div>
+          <div>
+            <SecondForm nextStep={nextStep} setTechStack={setTechStack} setYourLevel={setYourLevel} err={err} />
+          </div>
         );
-     
       default:
         return null;
     }

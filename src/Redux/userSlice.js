@@ -44,6 +44,7 @@ const userSlice = createSlice({
         assistant_id: null,
         creationTime: null,
         message: "hello",
+        message1 :"",
         userToken: null,
         passcode : [],
         interviewTime : null,
@@ -58,14 +59,17 @@ const userSlice = createSlice({
             state.creationTime = data.creationTime;
             state.interviewTime = data.interviewTime;
             state.message = data.message;
-        
         })
         .addCase(askNextQuestion.fulfilled, (state, action) => {
             const data = action.payload;
             // Update state with data from askNextQuestion
             state.message = data.message;
-            console.log(data.message)
-           
+            state.message1 = data.message1;
+            console.log(data)
+            if(state.message1.length>0){
+                state.thread_id=null;
+                state.assistant_id = null;
+            }
             // Modify state properties as needed
         })
         .addCase(registerUserAction.fulfilled, (state, action) => {

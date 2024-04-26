@@ -12,6 +12,7 @@
   "dependencies": {
     "@radix-ui/react-label": "^2.0.2",
     "@reduxjs/toolkit": "^2.2.3",
+    "@tabler/icons-react": "^3.2.0",
     "@tsparticles/engine": "^3.3.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.3.0",
